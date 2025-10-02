@@ -9,6 +9,7 @@ import (
 	"path"
 	"path/filepath"
 
+	build_lua "github.com/cmczk/sunny/lib/build-lua"
 	"github.com/cmczk/sunny/lib/download"
 	"github.com/cmczk/sunny/lib/gz"
 	"github.com/spf13/cobra"
@@ -46,6 +47,19 @@ to quickly create a Cobra application.`,
 		}
 
 		if err := os.Remove(dest); err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+
+		if err := build_lua.Run(
+			filepath.Join(homeDir, "lua-5.4.8"),
+			filepath.Join(homeDir, ".sunny", "lua", "5.4"),
+		); err != nil {
+			fmt.Printf("%s\n", err.Error())
+			os.Exit(1)
+		}
+
+		if err := os.RemoveAll(filepath.Join(homeDir, "lua-5.4.8")); err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)
 		}
