@@ -23,6 +23,8 @@ func Execute() {
 	rootCmd.AddCommand(selectLuaCmd)
 	rootCmd.AddCommand(listLuaCommand)
 
+	rootCmd.AddCommand(initLuaProjectCmd)
+
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
