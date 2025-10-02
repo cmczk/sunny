@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"os/exec"
+
+	"github.com/cmczk/sunny/lib/paths"
 )
 
 func Run(buildDir, installDir, version string) error {
@@ -25,7 +27,7 @@ func Run(buildDir, installDir, version string) error {
 	}
 
 	// TODO: extract this logic to another package
-	envVar := fmt.Sprintf("export PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"\n", version)
+	envVar := paths.ProfileExportPathLuaStmt(version)
 
 	file, err := os.OpenFile("/home/cmaczok/.bashrc", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {

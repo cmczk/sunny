@@ -19,6 +19,8 @@ to quickly create a Cobra application.`,
 
 func Execute() {
 	rootCmd.AddCommand(installLuaCmd)
+	rootCmd.AddCommand(deleteLuaCmd)
+
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)

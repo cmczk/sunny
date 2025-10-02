@@ -1,6 +1,7 @@
 package paths
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -32,4 +33,12 @@ func LuaUnpackedDir(archiveName string) string {
 
 func InstallLuaDir(version string) string {
 	return filepath.Join(MustHomeDir(), ".sunny", "lua", version)
+}
+
+func ProfileConfigPath() string {
+	return filepath.Join(MustHomeDir(), ".bashrc")
+}
+
+func ProfileExportPathLuaStmt(version string) string {
+	return fmt.Sprintf("\nexport PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"\n", version)
 }
