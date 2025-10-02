@@ -3,6 +3,7 @@ package gz
 import (
 	"archive/tar"
 	"compress/gzip"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -23,8 +24,10 @@ func Unpack(pathToFile, destDir string) error {
 
 	tarReader := tar.NewReader(gzReader)
 
-	if err := os.MkdirAll(destDir, os.ModePerm); err != nil {
-		return fmt.Errorf("cannot create directory for archive unpacking: %s", destDir)
+	if _, err := os.Stat(destDir); errors.Is(err, os.ErrNotExist) {
+		if err := os.MkdirAll(destDir, os.ModePerm); err != nil {
+			return fmt.Errorf("cannot create directory for archive unpacking: %s", destDir)
+		}
 	}
 
 	for {
