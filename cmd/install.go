@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path"
@@ -22,16 +21,14 @@ var installLuaCmd = &cobra.Command{
 		version := args[0]
 		url := urls.LuaURLByVersion(version)
 		if url == "" {
-			fmt.Printf("cannot find version: %s\n", version)
-			os.Exit(1)
+			log.Fatalf("cannot find version: %s\n", version)
 		}
 
 		log.Printf("fetch lua archive from %s", url)
 
 		dest := paths.DownloadLuaArchivePath(path.Base(url))
 		if err := download.Archive(url, dest); err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			log.Fatalln(err.Error())
 		}
 
 		log.Println("lua archive was fetched")

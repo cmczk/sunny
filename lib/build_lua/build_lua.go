@@ -29,9 +29,10 @@ func Run(buildDir, installDir, version string) error {
 	// TODO: extract this logic to another package
 	envVar := paths.ProfileExportPathLuaStmt(version)
 
-	file, err := os.OpenFile("/home/cmaczok/.bashrc", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	profileCfgPath := paths.ProfileConfigPath()
+	file, err := os.OpenFile(profileCfgPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return fmt.Errorf("cannot open .bashrc: %w", err)
+		return fmt.Errorf("cannot open %s: %w", profileCfgPath, err)
 	}
 
 	if _, err = file.WriteString(envVar); err != nil {
