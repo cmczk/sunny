@@ -7,7 +7,7 @@ import (
 	"os/exec"
 )
 
-func Run(buildDir, installDir string) error {
+func Run(buildDir, installDir, version string) error {
 	if err := os.Chdir(buildDir); err != nil {
 		return fmt.Errorf("cannot change dir to %s\n[ERROR] %w", buildDir, err)
 	}
@@ -24,19 +24,15 @@ func Run(buildDir, installDir string) error {
 		return fmt.Errorf("cannot run make install: %w", err)
 	}
 
-	envVars := `
-for dir in $HOME/.sunny/lua/5.*/bin; do
-  if [ -d "$dir" ]; then
-    export PATH="$dir:$PATH"
-  fi
-done`
+	// TODO: extract this logic to another package
+	envVar := fmt.Sprintf("export PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"\n", version)
 
 	file, err := os.OpenFile("/home/cmaczok/.bashrc", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("cannot open .bashrc: %w", err)
 	}
 
-	if _, err = file.WriteString(envVars); err != nil {
+	if _, err = file.WriteString(envVar); err != nil {
 		return fmt.Errorf("cannot add .sunny to PATH")
 	}
 
