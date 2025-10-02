@@ -26,17 +26,8 @@ func Run(buildDir, installDir, version string) error {
 		return fmt.Errorf("cannot run make install: %w", err)
 	}
 
-	// TODO: extract this logic to another package
-	envVar := paths.ProfileExportPathLuaStmt(version)
-
-	profileCfgPath := paths.ProfileConfigPath()
-	file, err := os.OpenFile(profileCfgPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return fmt.Errorf("cannot open %s: %w", profileCfgPath, err)
-	}
-
-	if _, err = file.WriteString(envVar); err != nil {
-		return fmt.Errorf("cannot add .sunny to PATH")
+	if err := paths.AddLuaInstallationToProfile(version); err != nil {
+		return err
 	}
 
 	return nil

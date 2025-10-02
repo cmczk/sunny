@@ -1,6 +1,7 @@
 package paths
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"log"
@@ -65,6 +66,65 @@ func ProfileConfigPath() string {
 
 func ProfileExportPathLuaStmt(version string) string {
 	return fmt.Sprintf("\nexport PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"\n", version)
+}
+
+func AddLuaInstallationToProfile(version string) error {
+	envVar := ProfileExportPathLuaStmt(version)
+
+	profileCfgPath := ProfileConfigPath()
+	file, err := os.OpenFile(profileCfgPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("cannot open %s: %w", profileCfgPath, err)
+	}
+
+	if _, err = file.WriteString(envVar); err != nil {
+		return fmt.Errorf("cannot add .sunny to PATH")
+	}
+
+	return nil
+
+}
+
+func DeleteLuaInstallationFromProfile() error {
+	lineToDelete := filepath.Join(".sunny", "lua")
+	profileConfigPath := ProfileConfigPath()
+
+	input, err := os.Open(profileConfigPath)
+	if err != nil {
+		return fmt.Errorf("cannot open profile config file: %s", profileConfigPath)
+	}
+	defer input.Close()
+
+	tmpFilePath := profileConfigPath + ".tmp"
+	output, err := os.Create(tmpFilePath)
+	if err != nil {
+		return fmt.Errorf("cannot create tmp file to change profile config")
+	}
+	defer output.Close()
+
+	scanner := bufio.NewScanner(input)
+	writer := bufio.NewWriter(output)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(strings.TrimSpace(line), strings.TrimSpace(lineToDelete)) {
+			continue
+		}
+
+		fmt.Fprintln(writer, line)
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil
+	}
+
+	writer.Flush()
+
+	if err := os.Rename(tmpFilePath, profileConfigPath); err != nil {
+		return fmt.Errorf("cannot save new profile config")
+	}
+
+	return nil
 }
 
 func unixProfileConfig() string {

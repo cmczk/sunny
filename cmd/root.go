@@ -20,6 +20,8 @@ to quickly create a Cobra application.`,
 func Execute() {
 	rootCmd.AddCommand(installLuaCmd)
 	rootCmd.AddCommand(deleteLuaCmd)
+	rootCmd.AddCommand(selectLuaCmd)
+	rootCmd.AddCommand(listLuaCommand)
 
 	err := rootCmd.Execute()
 	if err != nil {
