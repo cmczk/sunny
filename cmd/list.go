@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var listLuaCommand = &cobra.Command{
+var listLuaCmd = &cobra.Command{
 	Use:   "list [version]",
 	Short: "List installed versions of Lua",
 	Args:  cobra.NoArgs,

@@ -21,7 +21,8 @@ func Execute() {
 	rootCmd.AddCommand(installLuaCmd)
 	rootCmd.AddCommand(deleteLuaCmd)
 	rootCmd.AddCommand(selectLuaCmd)
-	rootCmd.AddCommand(listLuaCommand)
+	rootCmd.AddCommand(listLuaCmd)
+	rootCmd.AddCommand(sunnyPathCmd)
 
 	rootCmd.AddCommand(initLuaProjectCmd)
 	rootCmd.AddCommand(runLuaProjectCmd)
