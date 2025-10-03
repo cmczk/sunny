@@ -6,9 +6,9 @@ import (
 	"path"
 
 	"github.com/cmczk/sunny/lib/build_lua"
+	"github.com/cmczk/sunny/lib/config"
 	"github.com/cmczk/sunny/lib/download"
 	"github.com/cmczk/sunny/lib/gz"
-	"github.com/cmczk/sunny/lib/config"
 	"github.com/cmczk/sunny/lib/urls"
 	"github.com/spf13/cobra"
 )
@@ -56,6 +56,6 @@ var installLuaCmd = &cobra.Command{
 			log.Println("cannot remove unpacked lua directory")
 		}
 
-		log.Printf("lua %s was installed!\n\nnext steps:\n\nsource ~/.bashrc\nlua -v", version)
+		log.Printf("Lua %s was installed!\n\nnext steps:\n\nsunny select %s\nlua -v", version, version)
 	},
 }

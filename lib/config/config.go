@@ -24,6 +24,8 @@ const (
 
 var HomeDir = MustHomeDir()
 
+var VersionFilePath = filepath.Join(HomeDir, ".sunny", ".lua-version.global")
+
 var env = runtime.GOOS
 
 func MustHomeDir() string {
@@ -68,59 +70,20 @@ func ProfileExportPathLuaStmt(version string) string {
 	return fmt.Sprintf("export PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"", version)
 }
 
-func AddLuaInstallationToProfile(version string) error {
-	envVar := ProfileExportPathLuaStmt(version)
-
-	profileCfgPath := ProfileConfigPath()
-	file, err := os.OpenFile(profileCfgPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+func WriteGlobalLuaVersion(version string) error {
+	file, err := os.OpenFile(VersionFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		return fmt.Errorf("cannot open %s: %w", profileCfgPath, err)
+		return fmt.Errorf("cannot open .lua-version.global: %w", err)
+	}
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+	if _, err := writer.WriteString(version); err != nil {
+		return fmt.Errorf("cannot write global Lua version to .lua-version.global: %w", err)
 	}
 
-	if _, err = file.WriteString(envVar); err != nil {
-		return fmt.Errorf("cannot add .sunny to PATH")
-	}
-
-	return nil
-}
-
-func DeleteLuaInstallationFromProfile() error {
-	lineToDelete := filepath.Join(".sunny", "lua")
-	profileConfigPath := ProfileConfigPath()
-
-	input, err := os.Open(profileConfigPath)
-	if err != nil {
-		return fmt.Errorf("cannot open profile config file: %s", profileConfigPath)
-	}
-	defer input.Close()
-
-	tmpFilePath := profileConfigPath + ".tmp"
-	output, err := os.Create(tmpFilePath)
-	if err != nil {
-		return fmt.Errorf("cannot create tmp file to change profile config")
-	}
-	defer output.Close()
-
-	scanner := bufio.NewScanner(input)
-	writer := bufio.NewWriter(output)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(strings.TrimSpace(line), strings.TrimSpace(lineToDelete)) {
-			continue
-		}
-
-		fmt.Fprintln(writer, line)
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil
-	}
-
-	writer.Flush()
-
-	if err := os.Rename(tmpFilePath, profileConfigPath); err != nil {
-		return fmt.Errorf("cannot save new profile config")
+	if err := writer.Flush(); err != nil {
+		return fmt.Errorf("cannot write global Lua version to .lua-version.global: %w", err)
 	}
 
 	return nil

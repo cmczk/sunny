@@ -4,8 +4,8 @@ import (
 	"log"
 	"slices"
 
-	"github.com/cmczk/sunny/lib/lua"
 	"github.com/cmczk/sunny/lib/config"
+	"github.com/cmczk/sunny/lib/lua"
 	"github.com/spf13/cobra"
 )
 
@@ -20,21 +20,16 @@ var selectLuaCmd = &cobra.Command{
 		if len(luaVersions) == 0 {
 			log.Fatalln(`No Lua versions installed.
 To install Lua version use sunny install [version].`)
-			return
 		}
 
 		if !slices.Contains(luaVersions, version) {
-			log.Fatalf(`Lua version is not installed: %s.
+			log.Fatalf(`Lua %s is not installed.
 To install it use sunny install %s
 `, version, version)
 		}
 
-		if err := config.DeleteLuaInstallationFromProfile(); err != nil {
-			log.Fatalf("cannot delete export from profile: %s\n", err.Error())
-		}
-
-		if err := config.AddLuaInstallationToProfile(version); err != nil {
-			log.Fatalf("cannot add export to profile: %s\n", err.Error())
+		if err := config.WriteGlobalLuaVersion(version); err != nil {
+			log.Fatalln(err)
 		}
 
 		log.Printf("Lua %s selected. Type `source ~/.bashrc` and `lua -v` to see changes\n", version)
