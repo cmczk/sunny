@@ -5,11 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cmczk/sunny/lib/paths"
+	"github.com/cmczk/sunny/lib/config"
 )
 
 var (
-	sunnyLuaDir = filepath.Join(paths.HomeDir, ".sunny", "lua")
+	sunnyLuaDir = filepath.Join(config.HomeDir, ".sunny", "lua")
 )
 
 func MustInstalledLuaVersions() []string {

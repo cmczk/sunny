@@ -5,7 +5,7 @@ import (
 	"slices"
 
 	"github.com/cmczk/sunny/lib/lua"
-	"github.com/cmczk/sunny/lib/paths"
+	"github.com/cmczk/sunny/lib/config"
 	"github.com/spf13/cobra"
 )
 
@@ -29,11 +29,11 @@ To install it use sunny install %s
 `, version, version)
 		}
 
-		if err := paths.DeleteLuaInstallationFromProfile(); err != nil {
+		if err := config.DeleteLuaInstallationFromProfile(); err != nil {
 			log.Fatalf("cannot delete export from profile: %s\n", err.Error())
 		}
 
-		if err := paths.AddLuaInstallationToProfile(version); err != nil {
+		if err := config.AddLuaInstallationToProfile(version); err != nil {
 			log.Fatalf("cannot add export to profile: %s\n", err.Error())
 		}
 

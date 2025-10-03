@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cmczk/sunny/lib/paths"
+	"github.com/cmczk/sunny/lib/config"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +19,7 @@ var deleteLuaCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		version := args[0]
 
-		installLuaDir := paths.InstallLuaDir(version)
+		installLuaDir := config.InstallLuaDir(version)
 
 		if _, err := os.Stat(installLuaDir); errors.Is(err, os.ErrNotExist) {
 			log.Fatalf("lua %s is not installed", version)
@@ -29,7 +29,7 @@ var deleteLuaCmd = &cobra.Command{
 			log.Fatalf("cannot delete lua %s: %s", version, err.Error())
 		}
 
-		if err := deleteExportPath(paths.ProfileConfigPath(), version); err != nil {
+		if err := deleteExportPath(config.ProfileConfigPath(), version); err != nil {
 			log.Fatalf("%s", err.Error())
 		}
 
@@ -46,7 +46,7 @@ func deleteLuaDir(dirPath string) error {
 }
 
 func deleteExportPath(profileConfigPath, version string) error {
-	lineToDelete := paths.ProfileExportPathLuaStmt(version)
+	lineToDelete := config.ProfileExportPathLuaStmt(version)
 
 	input, err := os.Open(profileConfigPath)
 	if err != nil {

@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cmczk/sunny/lib/paths"
+	"github.com/cmczk/sunny/lib/config"
 	"github.com/spf13/cobra"
 )
 
-var versionFilePath = filepath.Join(paths.HomeDir, ".sunny", ".lua-version.global")
+var versionFilePath = filepath.Join(config.HomeDir, ".sunny", ".lua-version.global")
 
 var sunnyPathCmd = &cobra.Command{
 	Use:   "path",
@@ -39,7 +39,7 @@ var sunnyPathCmd = &cobra.Command{
 		}
 
 		fmt.Println(
-			paths.ProfileExportPathLuaStmt(
+			config.ProfileExportPathLuaStmt(
 				strings.TrimSpace((string(version))),
 			),
 		)

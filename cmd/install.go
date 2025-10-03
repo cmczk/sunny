@@ -8,7 +8,7 @@ import (
 	"github.com/cmczk/sunny/lib/build_lua"
 	"github.com/cmczk/sunny/lib/download"
 	"github.com/cmczk/sunny/lib/gz"
-	"github.com/cmczk/sunny/lib/paths"
+	"github.com/cmczk/sunny/lib/config"
 	"github.com/cmczk/sunny/lib/urls"
 	"github.com/spf13/cobra"
 )
@@ -26,23 +26,23 @@ var installLuaCmd = &cobra.Command{
 
 		log.Printf("fetch lua archive from %s", url)
 
-		dest := paths.DownloadLuaArchivePath(path.Base(url))
+		dest := config.DownloadLuaArchivePath(path.Base(url))
 		if err := download.Archive(url, dest); err != nil {
 			log.Fatalln(err.Error())
 		}
 
 		log.Println("lua archive was fetched")
 
-		homeDir := paths.MustHomeDir()
+		homeDir := config.MustHomeDir()
 		if err := gz.Unpack(dest, homeDir); err != nil {
 			log.Fatalf("cannot unpack lua archive to %s", homeDir)
 		}
 
-		unpackedLua := paths.LuaUnpackedDir(path.Base(url))
+		unpackedLua := config.LuaUnpackedDir(path.Base(url))
 
 		if err := build_lua.Run(
 			unpackedLua,
-			paths.InstallLuaDir(version),
+			config.InstallLuaDir(version),
 			version,
 		); err != nil {
 			log.Fatalf("cannot build lua: %s", err.Error())

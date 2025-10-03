@@ -1,4 +1,4 @@
-package paths
+package config
 
 import (
 	"bufio"
