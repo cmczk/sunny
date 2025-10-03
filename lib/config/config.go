@@ -97,7 +97,7 @@ func unixProfileConfig() string {
 	}
 
 	if _, err := os.Stat(filepath.Join(HomeDir, zshrc)); !errors.Is(err, os.ErrNotExist) {
-		return filepath.Join(HomeDir, bashrc)
+		return filepath.Join(HomeDir, zshrc)
 	} else {
 		log.Println(".zshrc not found")
 	}
