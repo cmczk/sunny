@@ -24,6 +24,7 @@ func Execute() {
 	rootCmd.AddCommand(listLuaCommand)
 
 	rootCmd.AddCommand(initLuaProjectCmd)
+	rootCmd.AddCommand(runLuaProjectCmd)
 
 	err := rootCmd.Execute()
 	if err != nil {

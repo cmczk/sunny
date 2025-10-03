@@ -36,6 +36,6 @@ var initLuaProjectCmd = &cobra.Command{
 		}
 		defer readme.Close()
 
-		log.Println("Project created. Use `lua src/main.lua` to run it.")
+		log.Println("Project created. Use `lua src/main.lua` or `sunny run` to run it.")
 	},
 }
