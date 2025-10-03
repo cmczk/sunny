@@ -26,6 +26,10 @@ func Run(buildDir, installDir, version string) error {
 		return fmt.Errorf("cannot run make install: %w", err)
 	}
 
+	if err := paths.DeleteLuaInstallationFromProfile(); err != nil {
+		return err
+	}
+
 	if err := paths.AddLuaInstallationToProfile(version); err != nil {
 		return err
 	}

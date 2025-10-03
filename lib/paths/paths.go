@@ -65,7 +65,7 @@ func ProfileConfigPath() string {
 }
 
 func ProfileExportPathLuaStmt(version string) string {
-	return fmt.Sprintf("\nexport PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"\n", version)
+	return fmt.Sprintf("export PATH=\"$HOME/.sunny/lua/%s/bin:$PATH\"", version)
 }
 
 func AddLuaInstallationToProfile(version string) error {
@@ -82,7 +82,6 @@ func AddLuaInstallationToProfile(version string) error {
 	}
 
 	return nil
-
 }
 
 func DeleteLuaInstallationFromProfile() error {
